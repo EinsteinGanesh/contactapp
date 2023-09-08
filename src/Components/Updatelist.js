@@ -2,24 +2,19 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useLocation } from "react-router-dom";
 
-function Contactbox(props) {
-  console.log("Contact box Function Called");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+function Updatelist(props) {
+  console.log("update Contact box Function Called");
 
-  const notify = () => toast("Saved Successfully !");
+  const notify = () => toast("Updated Successfully !");
+  const location = useLocation();
+  const data = location.state;
 
-  function getName(e) {
-    e.preventDefault();
-    setName(e.target.value);
-  }
-  function getEmail(e) {
-    e.preventDefault();
-    setEmail(e.target.value);
-  }
+  const [name, setName] = useState(data.name);
+  const [email, setEmail] = useState(data.email);
 
-  function add(e) {
+  function update(e) {
     if (name === "" && email === "") {
       alert("Fields are empty");
       return;
@@ -29,15 +24,16 @@ function Contactbox(props) {
       name: name,
       email: email,
     };
-    props.addContactHandler(newContact);
-    setName("");
+    console.log(newContact);
+    props.updateContactHandler(newContact, data.id);
     setEmail("");
+    setName("");
     notify();
   }
 
   return (
     <div className="container">
-      <h2 className="text-center">Contact App</h2>
+      <h2 className="text-center">Edit Contact</h2>
 
       <div className="form-floating mb-3">
         <input
@@ -46,7 +42,9 @@ function Contactbox(props) {
           id="floatingInput"
           placeholder="name@example.com"
           value={name}
-          onChange={getName}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
         />
         <label htmlFor="floatingInput">User Name</label>
       </div>
@@ -57,17 +55,17 @@ function Contactbox(props) {
           id="floatingemail"
           placeholder="email"
           value={email}
-          onChange={getEmail}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
         />
         <label htmlFor="floatingemail">Email</label>
         <div className="d-flex justify-content-center">
-          <button className="btn btn-primary mt-2" onClick={add}>
-            Add
+          <button className="btn btn-primary mt-2" onClick={update}>
+            Update
           </button>
           <Link to="/">
-            <button className="btn btn-primary mt-2 mx-2">
-              View Saved Contacts
-            </button>
+            <button className="btn btn-primary mt-2 mx-2">Home</button>
           </Link>
         </div>
       </div>
@@ -76,4 +74,4 @@ function Contactbox(props) {
   );
 }
 
-export default Contactbox;
+export default Updatelist;
